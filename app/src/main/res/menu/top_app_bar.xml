@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--    <item-->
+    <!--        android:id="@+id/notifications"-->
+    <!--        android:title="Notifications"-->
+    <!--        android:visible="true"-->
+    <!--        app:showAsAction="ifRoom"-->
+    <!--        android:icon="@drawable/baseline_notifications_none_24"/>-->
+
+    <item
+        android:id="@+id/messages"
+        android:title="Settings"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_settings_24"/>
+
+
+</menu>

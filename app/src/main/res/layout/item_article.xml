@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- item_article.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:padding="16dp">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView_news_like"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:lottie_rawRes="@raw/like_animation"
+        app:lottie_autoPlay="true"
+        android:visibility="invisible"
+        app:lottie_loop="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/linear_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/shape_post"
+        android:padding="16dp"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="title"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:id="@+id/article_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_launcher_foreground" />
+
+        <TextView
+            android:id="@+id/description"
+            android:textSize="14sp"
+            tools:text="description"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

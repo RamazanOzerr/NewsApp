@@ -1,0 +1,192 @@
+package com.example.newsapp.adapter;
+
+import static com.example.newsapp.util.Constants.NEWS_URL_INTENT;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
+import com.example.newsapp.R;
+import com.example.newsapp.model.Article;
+import com.example.newsapp.ui.savedNews.SavedNewsViewModel;
+import com.example.newsapp.ui.webview.ViewNewsActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.NewsViewHolder> {
+
+    private static final String TAG = "NEWS ADAPTER";
+//    private static final int ANIMATION_DURATION = 1000;
+//
+//    private List<Article> savedArticles;
+
+    private List<Article> articles;
+//
+//    private static final long DOUBLE_CLICK_TIME_DELTA = 300; // Time threshold for double-click (in ms)
+//    private long lastClickTime;
+//    private final int colorGreen;
+//    private final int colorWhite;
+    private final Context context;
+
+    private Handler handler;
+
+    public SavedNewsAdapter(List<Article> articles, Context context) {
+        this.articles = articles;
+//        lastClickTime = 0;
+//        savedArticles = new ArrayList<>();
+        this.context = context;
+//        colorGreen = ContextCompat.getColor(context, R.color.primary_green_saturated);
+//        colorWhite = ContextCompat.getColor(context, R.color.white);
+//        handler = new Handler();
+    }
+
+    @NonNull
+    @Override
+    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_article, parent, false);
+        return new NewsViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(NewsViewHolder holder, int position) {
+        Article article = articles.get(position);
+        holder.title.setText(article.getTitle());
+        holder.description.setText(article.getDescription());
+
+//        holder.currentNews.setOnClickListener(view -> {
+//            long clickTime = System.currentTimeMillis();
+//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+//                // Double-click detected
+//                playAnimation(holder, article);
+//            }
+//            lastClickTime = clickTime;
+//        });
+
+        holder.currentNews.setOnClickListener(view -> {
+            openNewsInWebView(article.getUrl()); // Open news in WebView
+        });
+
+//        holder.currentNews.setOnClickListener(view -> {
+//            long clickTime = System.currentTimeMillis();
+//
+//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+//                // Double-click detected
+//                handler.removeCallbacksAndMessages(null); // Cancel single-click action
+//                playAnimation(holder, article);
+//            } else {
+//                // Handle single click with a delay to differentiate from double-click
+//                handler.postDelayed(() -> {
+//                    openNewsInWebView(article.getUrl()); // Open news in WebView
+//                }, DOUBLE_CLICK_TIME_DELTA);
+//            }
+//            lastClickTime = clickTime;
+//        });
+
+
+        // Load image using Glide
+        Glide.with(holder.itemView.getContext())
+                .load(article.getUrlToImage())
+                .into(holder.imageView);
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    private void openNewsInWebView(String url){
+        Intent intent = new Intent(context, ViewNewsActivity.class);
+        intent.putExtra(NEWS_URL_INTENT, url);
+        context.startActivity(intent);
+    }
+
+//    private void markAsLiked(NewsViewHolder holder, Article article){
+//        holder.currentNews.setBackgroundColor(colorGreen);
+//        article.setLiked(true);
+//        savedArticles.add(article);
+//        Toast.makeText(context, "news marked as liked", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    private void undoLike(NewsViewHolder holder, Article article){
+//        holder.currentNews.setBackgroundColor(colorWhite);
+//        article.setLiked(false);
+//        savedArticles.remove(article);
+//        Toast.makeText(context, "news removed", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    private void playAnimation(NewsViewHolder holder, Article article){
+//        holder.lottiLikeAnimation.setVisibility(View.VISIBLE);
+//        holder.lottiLikeAnimation.bringToFront();
+//        holder.lottiLikeAnimation.playAnimation();
+//
+//        if(article.isLiked()){
+//            undoLike(holder, article);
+//            holder.lottiLikeAnimation.setAnimation(R.raw.unlike_anim);
+//        } else {
+//            markAsLiked(holder, article);
+//            holder.lottiLikeAnimation.setMaxHeight(100);
+//            holder.lottiLikeAnimation.setAnimation(R.raw.like_animation);
+//        }
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                holder.lottiLikeAnimation.setVisibility(View.INVISIBLE);
+//            }
+//        }, ANIMATION_DURATION);
+//    }
+
+    @Override
+    public int getItemCount() {
+        return articles != null ? articles.size() : 0;
+    }
+
+    public void updateArticles(List<Article> newArticles) {
+        this.articles = newArticles;
+        notifyDataSetChanged();
+    }
+
+    public void removeArticleAt(int position) {
+        if (articles != null && position >= 0 && position < articles.size()) {
+            articles.remove(position);
+            notifyItemRemoved(position);
+            Log.d(TAG, "removeArticleAt: article removed: " + position);
+        }
+    }
+
+    public void addArticleAt(int position, Article article) {
+        articles.add(position, article);
+        notifyItemInserted(position);
+    }
+
+
+    public static class NewsViewHolder extends RecyclerView.ViewHolder {
+        TextView title, description;
+        ImageView imageView;
+        LottieAnimationView lottiLikeAnimation;
+        LinearLayout currentNews;
+
+        public NewsViewHolder(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
+            imageView = itemView.findViewById(R.id.article_image);
+            lottiLikeAnimation = itemView.findViewById(R.id.animationView_news_like);
+            currentNews = itemView.findViewById(R.id.linear_news);
+        }
+    }
+}
