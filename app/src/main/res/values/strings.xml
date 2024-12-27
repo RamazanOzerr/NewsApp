@@ -1,6 +1,33 @@
 <resources>
-    <string name="app_name">NewsApp</string>
+    <string name="app_name">Newsify</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Saved News</string>
     <string name="title_notifications">Search</string>
+
+    <string name="onboarding_button_primary">Login</string>
+    <string name="onboarding_button_secondary">Sign up</string>
+    <string name="onboarding_button_third">Continue as a guest</string>
+
+    <string name="sign_in_title">Welcome back</string>
+    <string name="sign_in_subtitle">Login to your account</string>
+    <string name="sign_in_username_hint_text">Username</string>
+    <string name="sign_in_password_hint_text">Password</string>
+    <string name="sign_in_button">Login</string>
+    <string name="sign_in_checkbox">Remember me</string>
+    <string name="sign_in_password_reset">Forget password?</string>
+    <string name="sign_in_not_have_account">Do not have an account?</string>
+    <string name="sign_in_signup_text">Sign up</string>
+
+    <string name="signup_title">Register</string>
+    <string name="signup_subtitle">Create your new account</string>
+    <string name="signup_password2_hint_text">Password</string>
+    <string name="signup_email_hint_text">Email</string>
+    <string name="signup_password_hint_text">Password</string>
+    <string name="signup_button">Sign up</string>
+    <string name="signup_checkbox">Remember Me</string>
+    <string name="signup_password_reset">Forgot Password</string>
+    <string name="signup_text_have_account">Already have an account?</string>
+    <string name="signup_text_login">Login</string>
+    <string name="signup_text_terms_and_conditions">Read and agree with terms and policy</string>
+
 </resources>

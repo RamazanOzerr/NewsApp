@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment {
                 noDataAvailable();
                 Log.d(TAG, "onCreateView: articles are null");
             }
+            dismissProgressBar();
 //            if(articles != null && articles.isEmpty()){
 //                noDataAvailable();
 //                Log.d(TAG, "onCreateView: breaking news no data available");
@@ -71,6 +72,11 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+    private void dismissProgressBar(){
+        binding.progressBarHome.setVisibility(View.GONE);
+    }
+
 
     private void noDataAvailable(){
         binding.rvHomeNews.setVisibility(View.GONE);

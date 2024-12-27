@@ -5,7 +5,7 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import androidx.lifecycle.LiveData;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.newsapp.model.Article;
@@ -22,11 +22,33 @@ public class NewsRemoteRepository {
     private APIService apiService;
     private MutableLiveData<List<Article>> newsListLiveData;
 
+//    private APIService apiRemoteService;
+//    private MutableLiveData<List<Article>> userFavoriteListLiveData;
+
     private MutableLiveData<List<Article>> breakingNewsListLiveData;
 
     public NewsRemoteRepository() {
         apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
+//        apiRemoteService = RetrofitAuthClient.getRetrofitInstance().create(APIService.class);
     }
+
+//    public MutableLiveData<List<Article>> getFavNewsFromRemote(int userId){
+//        apiRemoteService.getUserFavourites(userId).enqueue(new Callback<FavoriteArticleResponse>() {
+//            @Override
+//            public void onResponse(Call<FavoriteArticleResponse> call, Response<FavoriteArticleResponse> response) {
+//                if(response.isSuccessful()){
+//                    userFavoriteListLiveData.setValue(response.body().getFavoriteArticles());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FavoriteArticleResponse> call, Throwable throwable) {
+//
+//            }
+//        });
+//
+//        return userFavoriteListLiveData;
+//    }
 
     public MutableLiveData<List<Article>> getBreakingNews(String country, String apiKey){
         if(breakingNewsListLiveData == null){

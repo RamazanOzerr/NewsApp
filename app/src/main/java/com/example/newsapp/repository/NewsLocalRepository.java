@@ -23,36 +23,11 @@ public class NewsLocalRepository {
         newsDao = NewsDatabase.getInstance(context).getNewsDao();
     }
 
-    // Insert NewsResponse
-//    public void insertNewsResponse(NewsResponseEntity newsResponse) {
-//        new Thread(() -> newsDao.insertNewsResponse(newsResponse)).start();
-//    }
 
     // Insert Article
     public void insertArticle(Article article) {
         new Thread(() -> newsDao.insertOrUpdateArticle(article)).start();
     }
-
-//    // Insert Source
-//    public void insertSource(Source source) {
-//        new Thread(() -> newsDao.insertSource(source)).start();
-//    }
-
-    // Fetch all News Responses
-//    public LiveData<List<NewsResponseEntity>> getAllNewsResponses() {
-//        if (allNewsResponses == null) {
-//            allNewsResponses = new MutableLiveData<>();
-//            loadAllNewsResponses();
-//        }
-//        return allNewsResponses;
-//    }
-
-//    private void loadAllNewsResponses() {
-//        new Thread(() -> {
-//            List<NewsResponseEntity> newsResponseList = newsDao.getAllNewsResponses();
-//            ((MutableLiveData<List<NewsResponseEntity>>) allNewsResponses).postValue(newsResponseList);
-//        }).start();
-//    }
 
     // Fetch all Articles
     public MutableLiveData<List<Article>> getAllArticles() {

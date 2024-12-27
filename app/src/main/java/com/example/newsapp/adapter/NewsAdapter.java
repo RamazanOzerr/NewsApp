@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -21,7 +20,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
 import com.example.newsapp.model.Article;
-import com.example.newsapp.ui.savedNews.SavedNewsViewModel;
 import com.example.newsapp.ui.webview.ViewNewsActivity;
 
 import java.util.ArrayList;
@@ -67,6 +65,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.title.setText(article.getTitle());
         holder.description.setText(article.getDescription());
 
+        // set if the article is already liked or not
         if(article.isLiked()){
             holder.currentNews.setBackgroundColor(colorGreen);
         } else {
@@ -82,6 +81,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 //            lastClickTime = clickTime;
 //        });
 
+        // set click listener
         holder.currentNews.setOnClickListener(view -> {
             long clickTime = System.currentTimeMillis();
 
@@ -98,35 +98,45 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             lastClickTime = clickTime;
         });
 
+        try{
+            // Load image using Glide
+            Glide.with(holder.itemView.getContext())
+                    .load(article.getUrlToImage())
+                    .into(holder.imageView);
+        } catch (Exception e){
+            //do nothing
+            holder.imageView.setImageResource(R.drawable.img_1);
+        }
 
-        // Load image using Glide
-        Glide.with(holder.itemView.getContext())
-                .load(article.getUrlToImage())
-                .into(holder.imageView);
     }
 
+    // get the list of the saved activities
     public List<Article> getSavedArticles(){
         return savedArticles;
     }
 
+    // view news in a new activity
     private void openNewsInWebView(String url){
         Intent intent = new Intent(context, ViewNewsActivity.class);
         intent.putExtra(NEWS_URL_INTENT, url);
         context.startActivity(intent);
     }
 
+    // handle like
     private void markAsLiked(NewsViewHolder holder, Article article){
         holder.currentNews.setBackgroundColor(colorGreen);
         article.setLiked(true);
         savedArticles.add(article);
     }
 
+    // handle unlike
     private void undoLike(NewsViewHolder holder, Article article){
         holder.currentNews.setBackgroundColor(colorWhite);
         article.setLiked(false);
         savedArticles.remove(article);
     }
 
+    // play like or unlike animation
     private void playAnimation(NewsViewHolder holder, Article article){
         holder.lottiLikeAnimation.setVisibility(View.VISIBLE);
         holder.lottiLikeAnimation.bringToFront();

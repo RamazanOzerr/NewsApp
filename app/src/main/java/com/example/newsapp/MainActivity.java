@@ -2,6 +2,9 @@ package com.example.newsapp;
 
 import android.os.Bundle;
 
+import com.example.newsapp.service.StorageService;
+import com.example.newsapp.util.Constants;
+import com.example.newsapp.util.Util;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,12 +12,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.newsapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private StorageService storageService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +31,40 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        setSupportActionBar(binding.toolBar);
+
+        storageService = new StorageService(this);
+
     }
 
+    private void signOut(){
+        storageService.remove(Constants.TOKEN_KEY);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.top_app_bar, menu);
+
+        // Find the menu item
+        MenuItem menuItem = menu.findItem(R.id.log_out);
+
+        // Set the listener
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle sign out
+                signOut();
+                Util.createShortToast(MainActivity.this, "signed out successfully");
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
 }

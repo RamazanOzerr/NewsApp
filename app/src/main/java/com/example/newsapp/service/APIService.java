@@ -1,9 +1,15 @@
 package com.example.newsapp.service;
 
 import com.example.newsapp.model.NewsResponse;
+import com.example.newsapp.model.auth.LoginRequest;
+import com.example.newsapp.model.auth.LoginResponse;
+import com.example.newsapp.model.auth.SignupRequest;
+import com.example.newsapp.model.auth.SignupResponse;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface APIService {
@@ -17,4 +23,16 @@ public interface APIService {
     //GET https://newsapi.org/v2/top-headlines?country=us&apiKey=766e71e132ef4250a9ed004c4c8c9153
     @GET("v2/top-headlines")
     Call<NewsResponse> getHeadlines(@Query("country") String country, @Query("apiKey") String apiKey);
+
+    @POST("api/login")
+    Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @POST("api/signup")
+    Call<SignupResponse> signup(@Body SignupRequest signupRequest);
+
+//    @GET("api/users/{userId}/favourites")
+//    Call<FavoriteArticleResponse> getUserFavourites(@Path("userId") int userId);
+
+
+
 }

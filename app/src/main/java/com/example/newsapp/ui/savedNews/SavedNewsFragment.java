@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,9 +22,11 @@ import com.example.newsapp.adapter.NewsAdapter;
 import com.example.newsapp.adapter.SavedNewsAdapter;
 import com.example.newsapp.databinding.FragmentSavedNewsBinding;
 import com.example.newsapp.model.Article;
+import com.example.newsapp.util.Constants;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SavedNewsFragment extends Fragment {
@@ -45,9 +48,30 @@ public class SavedNewsFragment extends Fragment {
 
         init();
 
+//        if(userId == null){
+//            viewModel.getAllArticlesFromRemote(Integer.parseInt(userId)).observe(getViewLifecycleOwner(), new Observer<List<Article>>() {
+//                @Override
+//                public void onChanged(List<Article> articles) {
+//                    if (articles != null) {
+//                        if(articles.isEmpty()){
+//                            noDataAvailable();
+//                        } else {
+//                            newsAdapter.updateArticles(articles);
+//                        }
+//                    }
+//                }
+//            });
+//        } else {
+//
+//        }
+
         viewModel.getAllArticles().observe(getViewLifecycleOwner(), articles -> {
             if (articles != null) {
-                newsAdapter.updateArticles(articles);
+                if(articles.isEmpty()){
+                    noDataAvailable();
+                } else {
+                    newsAdapter.updateArticles(articles);
+                }
             }
         });
 
@@ -86,51 +110,34 @@ public class SavedNewsFragment extends Fragment {
 //                newsAdapter.notifyItemRemoved(position);
 
                 // show a snackbar to undo deletion
-                Snackbar.make(binding.rvSavedNews, "Article deleted", Snackbar.LENGTH_SHORT)
+                 Snackbar.make(binding.rvSavedNews, "Article deleted", Snackbar.LENGTH_SHORT)
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 viewModel.insertOrUpdateArticle(article);
                                 newsAdapter.addArticleAt(position, article);
+                                setAsDataAvailable();
                             }
                         })
                         .show();
+
+                if(newsAdapter.getItemCount() == 0){
+                    noDataAvailable();
+                }
             }
         });
 
         itemTouchHelper.attachToRecyclerView(binding.rvSavedNews);
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
+    private void noDataAvailable(){
+        binding.rvSavedNews.setVisibility(View.GONE);
+        binding.noDataLayout.getRoot().setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: ");
+    private void setAsDataAvailable(){
+        binding.rvSavedNews.setVisibility(View.VISIBLE);
+        binding.noDataLayout.getRoot().setVisibility(View.GONE);
     }
 
     @Override

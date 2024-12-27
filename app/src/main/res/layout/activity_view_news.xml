@@ -23,6 +23,7 @@
             app:navigationIcon="@drawable/baseline_arrow_back_ios_24"
             app:title="News"
             app:titleCentered="true"
+            app:menu="@menu/appbar_view_news"
             />
 
     </com.google.android.material.appbar.AppBarLayout>

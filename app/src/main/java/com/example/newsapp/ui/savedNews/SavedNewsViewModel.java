@@ -18,9 +18,12 @@ public class SavedNewsViewModel extends AndroidViewModel {
     private final NewsLocalRepository newsRepository;
     private MutableLiveData<List<Article>> allArticles;
 
+    private final NewsRemoteRepository newsRemoteRepository;
+
     public SavedNewsViewModel(Application application) {
         super(application);
         newsRepository = new NewsLocalRepository(application);
+        newsRemoteRepository = new NewsRemoteRepository();
     }
 
     public LiveData<List<Article>> getAllArticles() {
@@ -42,6 +45,11 @@ public class SavedNewsViewModel extends AndroidViewModel {
         // In this case, just re-fetch data manually from repository
         allArticles = newsRepository.getAllArticles();
     }
+
+//    public LiveData<List<Article>> getAllArticlesFromRemote(int userId) {
+//        allArticles = newsRemoteRepository.getFavNewsFromRemote(userId);
+//        return allArticles;
+//    }
 
 
 }
