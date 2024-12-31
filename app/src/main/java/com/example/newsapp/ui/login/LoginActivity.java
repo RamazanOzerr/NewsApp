@@ -1,5 +1,7 @@
 package com.example.newsapp.ui.login;
 
+import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -110,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getToMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(INTENT_USER_LOGGED_IN, true);
         startActivity(intent);
         finish();
     }

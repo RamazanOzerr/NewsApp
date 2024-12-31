@@ -1,5 +1,7 @@
 package com.example.newsapp;
 
+import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
+
 import android.os.Bundle;
 
 import com.example.newsapp.service.StorageService;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private StorageService storageService;
+    private boolean isUserLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        init();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -39,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         storageService = new StorageService(this);
 
+    }
+
+    private void init(){
+        Intent intent = getIntent();
+        isUserLoggedIn = intent.getBooleanExtra(INTENT_USER_LOGGED_IN, false);
     }
 
     private void signOut(){
@@ -65,6 +75,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.log_out);
+        if (item != null && !isUserLoggedIn) {
+            item.setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
 
     }
 }

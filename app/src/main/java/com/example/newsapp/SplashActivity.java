@@ -1,5 +1,7 @@
 package com.example.newsapp;
 
+import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,12 +38,14 @@ public class SplashActivity extends AppCompatActivity {
         // user already signed in
         if(token != null){
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(INTENT_USER_LOGGED_IN, true);
             startActivity(intent);
             stopLoadingAnimation();
             finish();
         } else {
             Intent intent = new Intent(this, OnBoardingActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
