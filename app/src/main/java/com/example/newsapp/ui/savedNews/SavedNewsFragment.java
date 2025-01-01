@@ -47,29 +47,14 @@ public class SavedNewsFragment extends Fragment {
         View root = binding.getRoot();
 
         init();
-
-//        if(userId == null){
-//            viewModel.getAllArticlesFromRemote(Integer.parseInt(userId)).observe(getViewLifecycleOwner(), new Observer<List<Article>>() {
-//                @Override
-//                public void onChanged(List<Article> articles) {
-//                    if (articles != null) {
-//                        if(articles.isEmpty()){
-//                            noDataAvailable();
-//                        } else {
-//                            newsAdapter.updateArticles(articles);
-//                        }
-//                    }
-//                }
-//            });
-//        } else {
-//
-//        }
-
+        // Observe the LiveData from the ViewModel to update the list of saved articles
         viewModel.getAllArticles().observe(getViewLifecycleOwner(), articles -> {
             if (articles != null) {
                 if(articles.isEmpty()){
+                    // If no articles, show the "no data" message
                     noDataAvailable();
                 } else {
+                    // Otherwise, update the adapter with the articles
                     newsAdapter.updateArticles(articles);
                 }
             }
@@ -90,7 +75,10 @@ public class SavedNewsFragment extends Fragment {
 
     }
 
+    // Set up swipe-to-delete functionality for the RecyclerView (swipe left to delete)
     private void handleSwipeToDelete(){
+
+        // Create ItemTouchHelper for swipe gestures
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
                         ItemTouchHelper.LEFT) {
@@ -107,13 +95,13 @@ public class SavedNewsFragment extends Fragment {
                 // Remove the article from the database
                 viewModel.deleteArticle(article);
                 newsAdapter.removeArticleAt(position);
-//                newsAdapter.notifyItemRemoved(position);
 
-                // show a snackbar to undo deletion
+                // show a snack bar to undo deletion
                  Snackbar.make(binding.rvSavedNews, "Article deleted", Snackbar.LENGTH_SHORT)
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                // Undo the deletion by re-inserting the article
                                 viewModel.insertOrUpdateArticle(article);
                                 newsAdapter.addArticleAt(position, article);
                                 setAsDataAvailable();
@@ -121,36 +109,43 @@ public class SavedNewsFragment extends Fragment {
                         })
                         .show();
 
+                // If no more articles, show the "no data" layout
                 if(newsAdapter.getItemCount() == 0){
                     noDataAvailable();
                 }
             }
         });
 
+        // Attach the ItemTouchHelper to the RecyclerView
         itemTouchHelper.attachToRecyclerView(binding.rvSavedNews);
     }
 
+    // Display "no data available" message and hide the RecyclerView
     private void noDataAvailable(){
         binding.rvSavedNews.setVisibility(View.GONE);
         binding.noDataLayout.getRoot().setVisibility(View.VISIBLE);
     }
 
+    // Show the RecyclerView and hide the "no data available" message
     private void setAsDataAvailable(){
         binding.rvSavedNews.setVisibility(View.VISIBLE);
         binding.noDataLayout.getRoot().setVisibility(View.GONE);
     }
 
+    // Observe the articles in the ViewModel when the fragment resumes
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
         viewModel.getAllArticles().observe(getViewLifecycleOwner(), articles -> {
             if (articles != null) {
+                // Update the adapter when the data changes
                 newsAdapter.updateArticles(articles);
             }
         });
     }
 
+    // Clean up resources when the fragment's view is destroyed
     @Override
     public void onDestroyView() {
         super.onDestroyView();

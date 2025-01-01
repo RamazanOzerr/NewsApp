@@ -44,22 +44,29 @@ public class ViewNewsActivity extends AppCompatActivity {
         init();
     }
 
+    // Initialize the toolbar and get the URL to load
     private void init(){
 
         setSupportActionBar(binding.toolBar);
+        // Set the navigation click listener to finish the activity
         binding.toolBar.setNavigationOnClickListener(view -> {
             finish();
         });
 
+        // Retrieve the URL from the intent
         url = getIntent().getStringExtra(NEWS_URL_INTENT);
+
+        // If URL is valid, load the news article in the WebView
         if(url != null){
             viewNews(url);
         } else {
-            Toast.makeText(this, "an error occured", Toast.LENGTH_SHORT).show();
+            // Display an error toast if URL is not provide
+            Toast.makeText(this, "an error occurred", Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    // Load the news article in the WebView
     private void viewNews(String url){
         // Configure WebView settings
         WebSettings webSettings = binding.webview.getSettings();
@@ -72,6 +79,7 @@ public class ViewNewsActivity extends AppCompatActivity {
         binding.webview.loadUrl(url); // Replace with your news URL
     }
 
+    // Share the news article URL with other apps
     private void shareNews(){
         if(url == null){
             Util.createShortToast(this, "an error occurred, please try again later");

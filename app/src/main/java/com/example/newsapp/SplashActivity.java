@@ -29,31 +29,39 @@ public class SplashActivity extends AppCompatActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Start the loading animation while the app is checking the user's login status
         startLoadingAnimation();
+
+        // Initialize the storage service to retrieve data from local storage
         StorageService storageService = new StorageService(this);
 
+        // Get the stored token, which indicates whether the user is logged in
         String token = storageService.getString(Constants.TOKEN_KEY, null);
         Log.d(TAG, "onCreate: user id: " + token);
 
-        // user already signed in
+        // Check if the token is available (meaning the user is already signed in)
         if(token != null){
+            // If the user is logged in, navigate to the main activity
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(INTENT_USER_LOGGED_IN, true);
-            startActivity(intent);
-            stopLoadingAnimation();
-            finish();
+            intent.putExtra(INTENT_USER_LOGGED_IN, true); // Pass login status as an intent extra
+            startActivity(intent); // Start the main activity
+            stopLoadingAnimation();  // Stop the loading animation
+            finish();  // Close the splash activity
         } else {
+            // If the user is not logged in, navigate to the onboarding activity
             Intent intent = new Intent(this, OnBoardingActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
+    // Method to start the loading animation (visible and playing)
     private void startLoadingAnimation(){
         binding.animationViewLoadingSplash.setVisibility(View.VISIBLE);
         binding.animationViewLoadingSplash.playAnimation();
     }
 
+    // Method to stop the loading animation (hidden and paused)
     private void stopLoadingAnimation(){
         binding.animationViewLoadingSplash.setVisibility(View.GONE);
         binding.animationViewLoadingSplash.pauseAnimation();

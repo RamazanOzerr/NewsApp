@@ -40,14 +40,16 @@ public class SignUpActivity extends AppCompatActivity {
         authRepository = new AuthRepository();
     }
 
+    // Set up listeners for button clicks
     private void listeners(){
-        // set back button
+        // Back button click listener
         binding.signUpImageBack.setOnClickListener(view -> finish());
 
-        // get to walkthrough page
+        // Sign-up button click listener
         binding.signUpButton.setOnClickListener(view -> validateSignUp());
     }
 
+    // Validate the inputs for sign-up
     private void validateSignUp(){
         // start loading animation
         startLoadingAnimation();
@@ -71,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // Get the input values
         String email = binding.signupEdittextEmail.getText().toString().trim();
         String password = binding.signUpEdittextPassword.getText().toString().trim();
         String passwordConfirm = binding.signUpEdittextPasswordConfirm.getText().toString().trim();
@@ -92,6 +95,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // Check password length constraints
         if(password.length() < 8){
             Log.d(TAG, "validateSignUp: password is less than 8 characters");
             binding.signUpEdittextPassword.setError("Your password must be at least 8 characters");
@@ -114,6 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // Check if password and confirm password match
         if(!password.equals(passwordConfirm)){
             Log.d(TAG, "validateSignUp: passwords do not match");
             binding.signUpEdittextPasswordConfirm.setError("Password must match");
@@ -121,6 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // Check if terms and conditions are confirmed
         boolean isConfirmed = binding.checkboxChild.isChecked();
         if(!isConfirmed){
             Log.d(TAG, "validateSignUp: terms and conditions is not confirmed");
@@ -132,9 +138,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         Log.d(TAG, "validateSignUp: valid input: "
                 + email + " " + password + " " + passwordConfirm);
+
+        // Proceed with sign-up if all validations pass
         signUp(email, password);
     }
 
+    // Call the repository to sign up the user
     private void signUp(String email, String password){
         authRepository.signUp(email, password, new AuthRepository.AuthCallback<SignupResponse>() {
             @Override
@@ -149,17 +158,20 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    // Navigate to login activity
     private void getToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
+    // Start the loading animation
     private void startLoadingAnimation(){
         binding.animationViewLoadingSignup.setVisibility(View.VISIBLE);
         binding.animationViewLoadingSignup.playAnimation();
     }
 
+    // Stop the loading animation
     private void stopLoadingAnimation(){
         binding.animationViewLoadingSignup.setVisibility(View.GONE);
         binding.animationViewLoadingSignup.pauseAnimation();

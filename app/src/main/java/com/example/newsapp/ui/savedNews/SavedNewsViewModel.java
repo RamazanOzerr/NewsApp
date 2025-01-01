@@ -15,41 +15,34 @@ import java.util.List;
 
 public class SavedNewsViewModel extends AndroidViewModel {
 
+    // Repository for accessing local data (saved article
     private final NewsLocalRepository newsRepository;
+
+    // LiveData to hold the list of saved articles
     private MutableLiveData<List<Article>> allArticles;
 
-    private final NewsRemoteRepository newsRemoteRepository;
-
+    // Constructor to initialize repositories and ViewModel
     public SavedNewsViewModel(Application application) {
         super(application);
+        // Initialize the local repository with the application context
         newsRepository = new NewsLocalRepository(application);
-        newsRemoteRepository = new NewsRemoteRepository();
     }
 
+    // Get all saved articles from the local repository
     public LiveData<List<Article>> getAllArticles() {
         allArticles = newsRepository.getAllArticles();
         return allArticles;
     }
 
+    // Insert or update a saved article in the local database
     public void insertOrUpdateArticle(Article article) {
         newsRepository.insertArticle(article);
         allArticles = newsRepository.getAllArticles();
     }
 
+    // Delete a saved article from the local database
     public void deleteArticle(Article article) {
         newsRepository.deleteArticle(article);
     }
-
-    public void refreshArticles() {
-        // Optionally, force refresh of data by clearing cache or reloading
-        // In this case, just re-fetch data manually from repository
-        allArticles = newsRepository.getAllArticles();
-    }
-
-//    public LiveData<List<Article>> getAllArticlesFromRemote(int userId) {
-//        allArticles = newsRemoteRepository.getFavNewsFromRemote(userId);
-//        return allArticles;
-//    }
-
 
 }

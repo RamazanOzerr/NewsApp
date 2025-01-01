@@ -31,28 +31,17 @@ import java.util.List;
 public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.NewsViewHolder> {
 
     private static final String TAG = "NEWS ADAPTER";
-//    private static final int ANIMATION_DURATION = 1000;
-//
-//    private List<Article> savedArticles;
 
+    // the list of saved articles
     private List<Article> articles;
-//
-//    private static final long DOUBLE_CLICK_TIME_DELTA = 300; // Time threshold for double-click (in ms)
-//    private long lastClickTime;
-//    private final int colorGreen;
-//    private final int colorWhite;
+
+    // context: need it to open viewNewsActivity
     private final Context context;
 
-    private Handler handler;
-
+    // constructor
     public SavedNewsAdapter(List<Article> articles, Context context) {
         this.articles = articles;
-//        lastClickTime = 0;
-//        savedArticles = new ArrayList<>();
         this.context = context;
-//        colorGreen = ContextCompat.getColor(context, R.color.primary_green_saturated);
-//        colorWhite = ContextCompat.getColor(context, R.color.white);
-//        handler = new Handler();
     }
 
     @NonNull
@@ -64,102 +53,47 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.News
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
+        // get current article and bind it
         Article article = articles.get(position);
         holder.title.setText(article.getTitle());
         holder.description.setText(article.getDescription());
 
-//        holder.currentNews.setOnClickListener(view -> {
-//            long clickTime = System.currentTimeMillis();
-//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-//                // Double-click detected
-//                playAnimation(holder, article);
-//            }
-//            lastClickTime = clickTime;
-//        });
-
+        // set click listener to open viewNewsActivity
         holder.currentNews.setOnClickListener(view -> {
             openNewsInWebView(article.getUrl()); // Open news in WebView
         });
 
-//        holder.currentNews.setOnClickListener(view -> {
-//            long clickTime = System.currentTimeMillis();
-//
-//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-//                // Double-click detected
-//                handler.removeCallbacksAndMessages(null); // Cancel single-click action
-//                playAnimation(holder, article);
-//            } else {
-//                // Handle single click with a delay to differentiate from double-click
-//                handler.postDelayed(() -> {
-//                    openNewsInWebView(article.getUrl()); // Open news in WebView
-//                }, DOUBLE_CLICK_TIME_DELTA);
-//            }
-//            lastClickTime = clickTime;
-//        });
-
-
-        // Load image using Glide
+        // Load image using Glide library
         Glide.with(holder.itemView.getContext())
                 .load(article.getUrlToImage())
                 .into(holder.imageView);
     }
 
+    // get list of the articles
     public List<Article> getArticles() {
         return articles;
     }
 
+    // view news in a new activity
     private void openNewsInWebView(String url){
         Intent intent = new Intent(context, ViewNewsActivity.class);
         intent.putExtra(NEWS_URL_INTENT, url);
         context.startActivity(intent);
     }
 
-//    private void markAsLiked(NewsViewHolder holder, Article article){
-//        holder.currentNews.setBackgroundColor(colorGreen);
-//        article.setLiked(true);
-//        savedArticles.add(article);
-//        Toast.makeText(context, "news marked as liked", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    private void undoLike(NewsViewHolder holder, Article article){
-//        holder.currentNews.setBackgroundColor(colorWhite);
-//        article.setLiked(false);
-//        savedArticles.remove(article);
-//        Toast.makeText(context, "news removed", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    private void playAnimation(NewsViewHolder holder, Article article){
-//        holder.lottiLikeAnimation.setVisibility(View.VISIBLE);
-//        holder.lottiLikeAnimation.bringToFront();
-//        holder.lottiLikeAnimation.playAnimation();
-//
-//        if(article.isLiked()){
-//            undoLike(holder, article);
-//            holder.lottiLikeAnimation.setAnimation(R.raw.unlike_anim);
-//        } else {
-//            markAsLiked(holder, article);
-//            holder.lottiLikeAnimation.setMaxHeight(100);
-//            holder.lottiLikeAnimation.setAnimation(R.raw.like_animation);
-//        }
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                holder.lottiLikeAnimation.setVisibility(View.INVISIBLE);
-//            }
-//        }, ANIMATION_DURATION);
-//    }
-
     @Override
     public int getItemCount() {
         return articles != null ? articles.size() : 0;
     }
 
+    // update articles
     public void updateArticles(List<Article> newArticles) {
         this.articles = newArticles;
         notifyDataSetChanged();
     }
 
+    // remove an article at a certain position
+    // we call this method from the fragment when the user swipes left an article
     public void removeArticleAt(int position) {
         if (articles != null && position >= 0 && position < articles.size()) {
             articles.remove(position);
@@ -168,12 +102,15 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.News
         }
     }
 
+    // add an article to a certain position
+    // we call this method when the user undo the swipe left to remove operation
     public void addArticleAt(int position, Article article) {
         articles.add(position, article);
         notifyItemInserted(position);
     }
 
 
+    // view holder
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView title, description;
         ImageView imageView;

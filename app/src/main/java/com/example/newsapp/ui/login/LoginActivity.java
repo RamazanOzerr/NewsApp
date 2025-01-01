@@ -26,9 +26,15 @@ import com.example.newsapp.util.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // Binding for the activity's UI components
     private ActivityLoginBinding binding;
+
+    // Repository instance for authentication functionality
     private AuthRepository authRepository;
+
     private static final String TAG = "SIGN_IN";
+
+    // Storage service for handling saved data (e.g., token)
     private StorageService storageService;
 
     @Override
@@ -41,23 +47,30 @@ public class LoginActivity extends AppCompatActivity {
         listeners();
     }
 
+    // Initialize repositories and services
     private void init(){
         authRepository = new AuthRepository();
         storageService = new StorageService(this);
     }
 
+    // Set up listeners for the views in the layout
     private void listeners(){
-        // set back button
+        // Back button to close the login screen
         binding.signInImageBack.setOnClickListener(view -> finish());
 
+        // Navigate to the sign-up activity
         binding.signInTextSignUp.setOnClickListener(view -> getToSignUpActivity());
 
+        // Validate the input and attempt sign-in on button click
         binding.signInButton.setOnClickListener(view -> validateSignIn());
     }
 
+    // Validate the email and password input fields
     private void validateSignIn(){
+        // Start loading animation to indicate process
         startLoadingAnimation();
 
+        // Check if email or password is empty
         if(binding.signInEdittextEmail.getText() == null){
             Util.createShortToast(this, "an unknown error occurred, please try again later");
             stopLoadingAnimation();
@@ -69,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // Retrieve email and password from input fields
         String email = binding.signInEdittextEmail.getText().toString().trim();
         String password = binding.signInEdittextPassword.getText().toString().trim();
         Log.d(TAG, "validateSignIn: " + email + " " + password);
@@ -90,16 +104,21 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "validateSignIn: valid input");
+        // Proceed with the sign-in process
         signIn(email, password);
     }
 
+    // Perform sign-in by calling the login method from the AuthRepository
     private void signIn(String email, String passport){
-        // todo: write call back and get to main page
+        // Call the login method and handle success or failure
         authRepository.login(email, passport, new AuthRepository.AuthCallback<LoginResponse>() {
             @Override
             public void onSuccess(LoginResponse response) {
+                // Save user ID to shared preferences (token)
                 int id = response.getId();
                 storageService.saveString(Constants.TOKEN_KEY, String.valueOf(id));
+
+                // Navigate to the main activity on successful login
                 getToMainActivity();
             }
 
@@ -110,23 +129,27 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // Navigate to the MainActivity after successful login
     private void getToMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(INTENT_USER_LOGGED_IN, true);
+        intent.putExtra(INTENT_USER_LOGGED_IN, true); // Pass logged-in state
         startActivity(intent);
         finish();
     }
 
+    // Navigate to the SignUpActivity
     private void getToSignUpActivity(){
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
+    // Start loading animation to show progress during login
     private void startLoadingAnimation(){
         binding.animationViewLoadingSignIn.setVisibility(View.VISIBLE);
         binding.animationViewLoadingSignIn.playAnimation();
     }
 
+    // Stop loading animation once the process is complete
     private void stopLoadingAnimation(){
         binding.animationViewLoadingSignIn.setVisibility(View.GONE);
         binding.animationViewLoadingSignIn.pauseAnimation();

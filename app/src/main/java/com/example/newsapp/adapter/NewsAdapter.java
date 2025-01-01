@@ -25,21 +25,33 @@ import com.example.newsapp.ui.webview.ViewNewsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+// recyclerview adapter for home fragment and search news fragment
+// lists the breaking news (home fragment)
+// lists the searches news (search news fragment)
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     private static final String TAG = "NEWS ADAPTER";
+    // duration for like and unlike animations
     private static final int ANIMATION_DURATION = 1000;
 
+    // the list of the liked/saved articles
     private List<Article> savedArticles;
 
+    // the list of the articles
     private List<Article> articles;
 
+    // time for double click feature
     private static final long DOUBLE_CLICK_TIME_DELTA = 300; // Time threshold for double-click (in ms)
     private long lastClickTime;
+
+    // colors
     private final int colorGreen;
     private final int colorWhite;
+
+    // context: need it to open viewNewsActivity
     private final Context context;
 
+    // Handler for managing delayed actions (e.g., distinguishing single vs. double clicks).
     private Handler handler;
 
     public NewsAdapter(List<Article> articles, Context context) {
@@ -65,23 +77,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.title.setText(article.getTitle());
         holder.description.setText(article.getDescription());
 
-        // set if the article is already liked or not
+        // Set background color based on the article's like status.
         if(article.isLiked()){
             holder.currentNews.setBackgroundColor(colorGreen);
         } else {
             holder.currentNews.setBackgroundColor(colorWhite);
         }
 
-//        holder.currentNews.setOnClickListener(view -> {
-//            long clickTime = System.currentTimeMillis();
-//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-//                // Double-click detected
-//                playAnimation(holder, article);
-//            }
-//            lastClickTime = clickTime;
-//        });
-
-        // set click listener
+        // Set click listener for single and double-click actions.
         holder.currentNews.setOnClickListener(view -> {
             long clickTime = System.currentTimeMillis();
 
@@ -98,6 +101,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             lastClickTime = clickTime;
         });
 
+        // Load article image using Glide, or use a placeholder if loading fails.
         try{
             // Load image using Glide
             Glide.with(holder.itemView.getContext())
@@ -110,7 +114,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     }
 
-    // get the list of the saved activities
+    // get the list of the saved/liked activities
     public List<Article> getSavedArticles(){
         return savedArticles;
     }
@@ -150,6 +154,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             holder.lottiLikeAnimation.setAnimation(R.raw.like_animation);
         }
 
+        // view animation during the ANIMATION_DURATION
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -163,11 +168,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return articles != null ? articles.size() : 0;
     }
 
+    // method to update articles
     public void updateArticles(List<Article> newArticles) {
         this.articles = newArticles;
         notifyDataSetChanged();
     }
 
+    //view holder
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView title, description;
         ImageView imageView;

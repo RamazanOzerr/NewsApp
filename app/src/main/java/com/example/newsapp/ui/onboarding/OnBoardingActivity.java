@@ -32,8 +32,13 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     // set listeners
     private void listeners(){
+        // Listener for the "Continue as anonymous" option (skip login/signup)
         binding.tvOnboardingAnonymousUser.setOnClickListener(view -> getToMainActivity());
+
+        // Listener for the "Sign In" button to navigate to the login screen
         binding.signInButton.setOnClickListener(view -> getToLoginActivity());
+
+        // Listener for the "Create Account" button to navigate to the sign-up screen
         binding.createAccountButton.setOnClickListener(view -> getToSignUpActivity());
     }
 
@@ -50,11 +55,12 @@ public class OnBoardingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // get to main activity
+    // Navigate to the Main activity as an anonymous user (not logged in)
     private void getToMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
+        // Pass the flag indicating the user is not logged in
         intent.putExtra(INTENT_USER_LOGGED_IN, false);
         startActivity(intent);
-        finish();
+        finish(); // Close the onboarding activity
     }
 }

@@ -36,21 +36,25 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
+        // Set up the navigation controller for the bottom navigation view
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+        // Set up the toolbar as the app bar
         setSupportActionBar(binding.toolBar);
 
+        // Initialize storage service
         storageService = new StorageService(this);
-
     }
 
+    // Initialize variables and check if the user is logged in
     private void init(){
+        // Retrieve the user login status from the intent
         Intent intent = getIntent();
         isUserLoggedIn = intent.getBooleanExtra(INTENT_USER_LOGGED_IN, false);
     }
 
+    // Method to handle user sign-out
     private void signOut(){
         storageService.remove(Constants.TOKEN_KEY);
     }
@@ -78,9 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Prepare the options menu before displaying it
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.log_out);
+
+        // If the user is not logged in, hide the logout item
         if (item != null && !isUserLoggedIn) {
             item.setVisible(false);
         }
