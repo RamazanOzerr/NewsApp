@@ -1,4 +1,4 @@
-package com.example.newsapp;
+package com.example.newsapp.ui;
 
 import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
 
@@ -7,11 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.newsapp.databinding.ActivitySplashBinding;
 import com.example.newsapp.service.StorageService;

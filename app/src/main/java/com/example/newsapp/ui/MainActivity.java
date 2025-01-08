@@ -1,23 +1,22 @@
-package com.example.newsapp;
+package com.example.newsapp.ui;
 
 import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
 
 import android.os.Bundle;
 
+import com.example.newsapp.R;
 import com.example.newsapp.service.StorageService;
+import com.example.newsapp.ui.onboarding.OnBoardingActivity;
 import com.example.newsapp.util.Constants;
 import com.example.newsapp.util.Util;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.newsapp.databinding.ActivityMainBinding;
 
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 // Handle sign out
                 signOut();
+                startActivity(new Intent(MainActivity.this, OnBoardingActivity.class));
                 Util.createShortToast(MainActivity.this, "signed out successfully");
                 return true;
             }

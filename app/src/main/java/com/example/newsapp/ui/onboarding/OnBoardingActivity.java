@@ -5,14 +5,9 @@ import static com.example.newsapp.util.Constants.INTENT_USER_LOGGED_IN;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.newsapp.MainActivity;
-import com.example.newsapp.R;
+import com.example.newsapp.ui.MainActivity;
 import com.example.newsapp.databinding.ActivityOnBoardingBinding;
 import com.example.newsapp.ui.login.LoginActivity;
 import com.example.newsapp.ui.signup.SignUpActivity;

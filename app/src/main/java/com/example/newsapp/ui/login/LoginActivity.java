@@ -8,14 +8,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.newsapp.MainActivity;
-import com.example.newsapp.R;
+import com.example.newsapp.ui.MainActivity;
 import com.example.newsapp.databinding.ActivityLoginBinding;
 import com.example.newsapp.model.auth.LoginResponse;
 import com.example.newsapp.repository.AuthRepository;

@@ -5,7 +5,6 @@ import static com.example.newsapp.util.Constants.NEWS_URL_INTENT;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.newsapp.MainActivity;
 import com.example.newsapp.R;
 import com.example.newsapp.databinding.ActivityViewNewsBinding;
 import com.example.newsapp.util.Util;
